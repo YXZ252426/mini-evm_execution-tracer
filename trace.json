@@ -1,0 +1,12 @@
+{
+  "summary": {
+    "success": true,
+    "gas_used": 0,
+    "step_count": 0,
+    "call_count": 0,
+    "log_count": 0
+  },
+  "steps": [],
+  "calls": [],
+  "logs": []
+}

@@ -1,22 +1,46 @@
-struct Solution();
+mod cli;
+mod executor;
+mod output;
+mod tracer;
+mod types;
+mod utils;
 
-impl Solution {
-    pub fn max_profit(prices: Vec<i32>) -> i32 {
-        let mut min_prices = 10000;
-        let mut max_profit = 0;
-        for i in 0..prices.len() {
-           if (prices[i] < min_prices) {
-            min_prices = prices[i];
-           }else {
-            max_profit = max_profit.max(prices[i] - min_prices);
-           } 
+use clap::Parser;
+use cli::{Cli, Commands};
+use eyre::{Ok, Result};
+
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+
+    match cli.command {
+        Commands::TraceLocal { 
+            contract, 
+            calldata, 
+            from, 
+            to, 
+            value, 
+            gas_limit, 
+            json, 
+            max_steps 
+        } => {
+            let output = executor::trace_local(
+                &contract, 
+                &calldata, 
+                &from, 
+                &to, 
+                &value, 
+                gas_limit, 
+                max_steps
+            )?;
+
+            output::print_summary(&output);
+
+            if let Some(path) = json {
+                output::write_json(&path, &output)?;
+                println!("trace written to {}", path.display());
+            }            
         }
-        max_profit
     }
-}
-fn main() {
-    for i in 0..5 {
-        println!("{}", i);
-    }
-    println!("Hello, world!");
+    
+    Ok(())
 }
