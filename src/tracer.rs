@@ -1,5 +1,7 @@
-use crate::types::{CallTrace, LogTrace, StepTrace};
-use revm::Inspector;
+use crate::{types::{CallTrace, LogTrace, StepTrace}, utils::opcode_name};
+use revm::{
+    Inspector, 
+    interpreter::{interpreter::EthInterpreter, interpreter_types::Jumps}};
 
 #[derive(Debug, Default)]
 pub struct MiniTracer {
@@ -27,4 +29,31 @@ impl MiniTracer {
     }
 }
 
-impl<CTX> Inspector<CTX> for MiniTracer {}
+impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer {
+    fn step(&mut self,interp: &mut revm::interpreter::Interpreter<EthInterpreter> , context: &mut CTX) {
+        if !self.should_record_step() {
+            return
+        }
+
+        let opcode = interp.bytecode.opcode();
+        let stack_top = interp
+            .stack
+            .data()
+            .iter()
+            .rev()
+            .take(self.record_stack_top)
+            .map(| value | format!("{value:#x}"))
+            .collect();
+
+        self.steps.push(StepTrace { 
+            depth: self.depth, 
+            pc: interp.bytecode.pc(), 
+            opcode, 
+            opcode_hex: format!("0x{opcode:02x}"), 
+            opcode_name: opcode_name(opcode), 
+            gas_remaining: interp.gas.remaining(), 
+            stack_top, 
+            memory_size: interp.memory.len() 
+        });
+    }
+}

@@ -1,4 +1,4 @@
-## 3.8
+## 3.8 connect to evm
 learn the usage of eyre, `wrap_err`, `wrap_err_with`
 
 learn how a proj is construct gradually: code line by line by hand!!
@@ -14,3 +14,6 @@ some inspiration: It is actually to build and drive a big "truck", how to manage
 but actually do not need to worry too much, because different proj usually follower certain patterns to achieving easy-use, for example: `parse`, `to_string`, use of closure, different function classified with different impl, the archi design for api in a proj: `revm::{database, primitives, state}`
 
 **type transition!**: from, into, as, parse, to...
+
+## 3.8 add step tracer
+how to quickly locate certain api in large rust crates

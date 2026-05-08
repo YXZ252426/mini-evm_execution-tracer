@@ -1,102 +1,65 @@
 ```rust
 use crate::{
-    tracer::MiniTracer,
-    types::{LogTrace, TraceOutput, TraceSummary},
-    utils::{parse_hex, read_hex_file},
+    types::{CallTrace, LogTrace, StepTrace},
+    utils::opcode_name,
 };
-use eyre::{Context as EyreContext, Result};
 use revm::{
-    Context, InspectEvm, MainBuilder, MainContext,
-    database::{CacheDB, EmptyDB},
-    primitives::{Address, Bytes, TxKind, U256},
-    state::{AccountInfo, Bytecode},
+    Inspector,
+    interpreter::{Interpreter, interpreter::EthInterpreter, interpreter_types::Jumps},
 };
-use std::path::Path;
 
-pub fn trace_local(
-    contract_path: &Path,
-    call_data: &str,
-    from: &str,
-    to: &str,
-    value: &str,
-    gas_limit: u64,
-    max_steps: Option<usize>,
-) -> Result<TraceOutput> {
-    let contract_bytes = read_hex_file(contract_path).wrap_err_with(|| {
-        format!(
-            "failed to read contract bytecode from {}",
-            contract_path.display()
-        )
-    })?;
-    let call_data = parse_hex(call_data).wrap_err("failed to parse calldata hex")?;
-    let from = parse_address(from).wrap_err("failed to parse --from address")?;
-    let to = parse_address(to).wrap_err("failed to parse --to address")?;
-    let value = parse_u256(value).wrap_err("failed to parse --value")?;
-
-    let mut db = CacheDB::new(EmptyDB::new());
-    db.insert_account_info(from, AccountInfo::default().with_balance(U256::MAX));
-    db.insert_account_info(
-        to,
-        AccountInfo::default().with_code(Bytecode::new_legacy(Bytes::from(contract_bytes))),
-    );
-
-    let tx = revm::context::TxEnv::builder()
-        .caller(from)
-        .kind(TxKind::Call(to))
-        .value(value)
-        .data(Bytes::from(call_data))
-        .gas_limit(gas_limit)
-        .build_fill();
-
-    let tracer = MiniTracer::new(max_steps);
-    let ctx = Context::mainnet()
-        .modify_cfg_chained(|cfg| cfg.tx_gas_limit_cap = Some(u64::MAX))
-        .with_db(db);
-    let mut evm = ctx.build_mainnet_with_inspector(tracer);
-    let result_and_state = evm.inspect_tx(tx).wrap_err("revm execution failed")?;
-
-    let tracer = evm.into_inspector();
-    let logs = result_and_state
-        .result
-        .logs()
-        .iter()
-        .map(log_trace)
-        .collect::<Vec<_>>();
-    let success = result_and_state.result.is_success();
-    let gas_used = result_and_state.result.tx_gas_used();
-
-    Ok(TraceOutput {
-        summary: TraceSummary {
-            success,
-            gas_used,
-            step_count: tracer.steps.len(),
-            call_count: tracer.calls.len(),
-            log_count: logs.len(),
-        },
-        steps: tracer.steps,
-        calls: tracer.calls,
-        logs,
-    })
+#[derive(Debug, Default)]
+pub struct MiniTracer {
+    pub steps: Vec<StepTrace>,
+    pub calls: Vec<CallTrace>,
+    pub logs: Vec<LogTrace>,
+    pub max_steps: Option<usize>,
+    pub record_stack_top: usize,
+    pub depth: usize,
 }
 
-fn parse_address(input: &str) -> Result<Address> {
-    input.parse::<Address>().map_err(Into::into)
-}
+impl MiniTracer {
+    pub fn new(max_steps: Option<usize>) -> Self {
+        Self {
+            max_steps,
+            record_stack_top: 4,
+            ..Default::default()
+        }
+    }
 
-fn parse_u256(input: &str) -> Result<U256> {
-    let input = input.trim();
-    if let Some(hex) = input.strip_prefix("0x") {
-        Ok(U256::from_str_radix(hex, 16)?)
-    } else {
-        Ok(U256::from_str_radix(input, 10)?)
+    pub fn should_record_step(&self) -> bool {
+        self.max_steps
+            .map(|max| self.steps.len() < max)
+            .unwrap_or(true)
     }
 }
 
-fn log_trace(log: &revm::primitives::Log) -> LogTrace {
-    LogTrace {
-        address: log.address.to_string(),
-        topics: log.data.topics().iter().map(ToString::to_string).collect(),
-        data: format!("0x{}", hex::encode(&log.data.data)),
+impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer {
+    fn step(&mut self, interp: &mut Interpreter<EthInterpreter>, _context: &mut CTX) {
+        if !self.should_record_step() {
+            return;
+        }
+
+        let opcode = interp.bytecode.opcode();
+        let stack_top = interp
+            .stack
+            .data()
+            .iter()
+            .rev()
+            .take(self.record_stack_top)
+            .map(|value| format!("{value:#x}"))
+            .collect();
+
+        self.steps.push(StepTrace {
+            depth: self.depth,
+            pc: interp.bytecode.pc(),
+            opcode,
+            opcode_hex: format!("0x{opcode:02x}"),
+            opcode_name: opcode_name(opcode),
+            gas_remaining: interp.gas.remaining(),
+            stack_top,
+            memory_size: interp.memory.len(),
+        });
     }
 }
 

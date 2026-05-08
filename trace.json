@@ -2,11 +2,57 @@
   "summary": {
     "success": true,
     "gas_used": 43106,
-    "step_count": 0,
+    "step_count": 4,
     "call_count": 0,
     "log_count": 0
   },
-  "steps": [],
+  "steps": [
+    {
+      "depth": 0,
+      "pc": 0,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29979000,
+      "stack_top": [],
+      "memory_size": 0
+    },
+    {
+      "depth": 0,
+      "pc": 2,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29978997,
+      "stack_top": [
+        "0x1"
+      ],
+      "memory_size": 0
+    },
+    {
+      "depth": 0,
+      "pc": 4,
+      "opcode": 85,
+      "opcode_hex": "0x55",
+      "opcode_name": "SSTORE",
+      "gas_remaining": 29978994,
+      "stack_top": [
+        "0x0",
+        "0x1"
+      ],
+      "memory_size": 0
+    },
+    {
+      "depth": 0,
+      "pc": 5,
+      "opcode": 0,
+      "opcode_hex": "0x00",
+      "opcode_name": "STOP",
+      "gas_remaining": 29956894,
+      "stack_top": [],
+      "memory_size": 0
+    }
+  ],
   "calls": [],
   "logs": []
 }
