@@ -1,7 +1,9 @@
 use crate::{types::{CallTrace, LogTrace, StepTrace}, utils::opcode_name};
 use revm::{
     Inspector, 
-    interpreter::{interpreter::EthInterpreter, interpreter_types::Jumps}};
+    interpreter::{interpreter::EthInterpreter, interpreter_types::Jumps},
+    primitives::Log,
+};
 
 #[derive(Debug, Default)]
 pub struct MiniTracer {
@@ -55,5 +57,17 @@ impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer {
             stack_top, 
             memory_size: interp.memory.len() 
         });
+    }
+
+    fn log(&mut self,context: &mut CTX,log: Log) {
+        self.logs.push(log_trace(&log));
+    }
+}
+
+fn log_trace(log: &Log ) -> LogTrace {
+    LogTrace { 
+        address: log.address.to_string(), 
+        topics: log.data.topics().iter().map(ToString::to_string).collect(), 
+        data:  format!("0x{}", hex::encode(&log.data.data)),
     }
 }

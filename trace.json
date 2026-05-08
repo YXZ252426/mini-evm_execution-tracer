@@ -1,10 +1,10 @@
 {
   "summary": {
     "success": true,
-    "gas_used": 43106,
-    "step_count": 4,
+    "gas_used": 22027,
+    "step_count": 8,
     "call_count": 0,
-    "log_count": 0
+    "log_count": 1
   },
   "steps": [
     {
@@ -25,34 +25,91 @@
       "opcode_name": "PUSH1",
       "gas_remaining": 29978997,
       "stack_top": [
-        "0x1"
+        "0x2a"
       ],
       "memory_size": 0
     },
     {
       "depth": 0,
       "pc": 4,
-      "opcode": 85,
-      "opcode_hex": "0x55",
-      "opcode_name": "SSTORE",
+      "opcode": 82,
+      "opcode_hex": "0x52",
+      "opcode_name": "MSTORE",
       "gas_remaining": 29978994,
       "stack_top": [
         "0x0",
-        "0x1"
+        "0x2a"
       ],
       "memory_size": 0
     },
     {
       "depth": 0,
       "pc": 5,
+      "opcode": 127,
+      "opcode_hex": "0x7f",
+      "opcode_name": "PUSH32",
+      "gas_remaining": 29978988,
+      "stack_top": [],
+      "memory_size": 32
+    },
+    {
+      "depth": 0,
+      "pc": 38,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29978985,
+      "stack_top": [
+        "0x1"
+      ],
+      "memory_size": 32
+    },
+    {
+      "depth": 0,
+      "pc": 40,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29978982,
+      "stack_top": [
+        "0x20",
+        "0x1"
+      ],
+      "memory_size": 32
+    },
+    {
+      "depth": 0,
+      "pc": 42,
+      "opcode": 161,
+      "opcode_hex": "0xa1",
+      "opcode_name": "LOG1",
+      "gas_remaining": 29978979,
+      "stack_top": [
+        "0x0",
+        "0x20",
+        "0x1"
+      ],
+      "memory_size": 32
+    },
+    {
+      "depth": 0,
+      "pc": 43,
       "opcode": 0,
       "opcode_hex": "0x00",
       "opcode_name": "STOP",
-      "gas_remaining": 29956894,
+      "gas_remaining": 29977973,
       "stack_top": [],
-      "memory_size": 0
+      "memory_size": 32
     }
   ],
   "calls": [],
-  "logs": []
+  "logs": [
+    {
+      "address": "0x2000000000000000000000000000000000000000",
+      "topics": [
+        "0x0000000000000000000000000000000000000000000000000000000000000001"
+      ],
+      "data": "0x000000000000000000000000000000000000000000000000000000000000002a"
+    }
+  ]
 }
