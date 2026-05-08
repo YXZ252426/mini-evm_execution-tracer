@@ -1,4 +1,5 @@
 use crate::types::{CallTrace, LogTrace, StepTrace};
+use revm::Inspector;
 
 #[derive(Debug, Default)]
 pub struct MiniTracer {
@@ -25,3 +26,5 @@ impl MiniTracer {
             .unwrap_or(true)
     }
 }
+
+impl<CTX> Inspector<CTX> for MiniTracer {}
