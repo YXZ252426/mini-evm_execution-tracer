@@ -1,10 +1,10 @@
 {
   "summary": {
     "success": true,
-    "gas_used": 22027,
-    "step_count": 8,
-    "call_count": 0,
-    "log_count": 1
+    "gas_used": 24121,
+    "step_count": 9,
+    "call_count": 2,
+    "log_count": 0
   },
   "steps": [
     {
@@ -25,91 +25,138 @@
       "opcode_name": "PUSH1",
       "gas_remaining": 29978997,
       "stack_top": [
-        "0x2a"
+        "0x0"
       ],
       "memory_size": 0
     },
     {
       "depth": 0,
       "pc": 4,
-      "opcode": 82,
-      "opcode_hex": "0x52",
-      "opcode_name": "MSTORE",
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
       "gas_remaining": 29978994,
       "stack_top": [
         "0x0",
-        "0x2a"
+        "0x0"
       ],
       "memory_size": 0
     },
     {
       "depth": 0,
-      "pc": 5,
-      "opcode": 127,
-      "opcode_hex": "0x7f",
-      "opcode_name": "PUSH32",
-      "gas_remaining": 29978988,
-      "stack_top": [],
-      "memory_size": 32
+      "pc": 6,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29978991,
+      "stack_top": [
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "memory_size": 0
     },
     {
       "depth": 0,
-      "pc": 38,
+      "pc": 8,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29978988,
+      "stack_top": [
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "memory_size": 0
+    },
+    {
+      "depth": 0,
+      "pc": 10,
       "opcode": 96,
       "opcode_hex": "0x60",
       "opcode_name": "PUSH1",
       "gas_remaining": 29978985,
       "stack_top": [
-        "0x1"
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
       ],
-      "memory_size": 32
+      "memory_size": 0
     },
     {
       "depth": 0,
-      "pc": 40,
-      "opcode": 96,
-      "opcode_hex": "0x60",
-      "opcode_name": "PUSH1",
+      "pc": 12,
+      "opcode": 97,
+      "opcode_hex": "0x61",
+      "opcode_name": "PUSH2",
       "gas_remaining": 29978982,
       "stack_top": [
-        "0x20",
-        "0x1"
+        "0x1",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
       ],
-      "memory_size": 32
+      "memory_size": 0
     },
     {
       "depth": 0,
-      "pc": 42,
-      "opcode": 161,
-      "opcode_hex": "0xa1",
-      "opcode_name": "LOG1",
+      "pc": 15,
+      "opcode": 241,
+      "opcode_hex": "0xf1",
+      "opcode_name": "CALL",
       "gas_remaining": 29978979,
       "stack_top": [
+        "0x2710",
+        "0x1",
         "0x0",
-        "0x20",
-        "0x1"
+        "0x0",
+        "0x0",
+        "0x0"
       ],
-      "memory_size": 32
+      "memory_size": 0
     },
     {
       "depth": 0,
-      "pc": 43,
+      "pc": 16,
       "opcode": 0,
       "opcode_hex": "0x00",
       "opcode_name": "STOP",
-      "gas_remaining": 29977973,
-      "stack_top": [],
-      "memory_size": 32
+      "gas_remaining": 29975879,
+      "stack_top": [
+        "0x1"
+      ],
+      "memory_size": 0
     }
   ],
-  "calls": [],
-  "logs": [
+  "calls": [
     {
-      "address": "0x2000000000000000000000000000000000000000",
-      "topics": [
-        "0x0000000000000000000000000000000000000000000000000000000000000001"
-      ],
-      "data": "0x000000000000000000000000000000000000000000000000000000000000002a"
+      "depth": 0,
+      "kind": "CALL",
+      "from": "0x1000000000000000000000000000000000000000",
+      "to": "0x2000000000000000000000000000000000000000",
+      "value": "0x0",
+      "input": "0x",
+      "gas_limit": 29979000,
+      "success": null,
+      "gas_used": null
+    },
+    {
+      "depth": 0,
+      "kind": "CALL",
+      "from": "0x2000000000000000000000000000000000000000",
+      "to": "0x0000000000000000000000000000000000000001",
+      "value": "0x0",
+      "input": "0x",
+      "gas_limit": 10000,
+      "success": null,
+      "gas_used": null
     }
-  ]
+  ],
+  "logs": []
 }

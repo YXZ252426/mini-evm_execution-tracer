@@ -5,7 +5,10 @@ use crate::{
 };
 use revm::{
     Inspector,
-    interpreter::{Interpreter, interpreter::EthInterpreter, interpreter_types::Jumps},
+    context_interface::ContextTr,
+    interpreter::{
+        CallInputs, CallOutcome, Interpreter, interpreter::EthInterpreter, interpreter_types::Jumps,
+    },
     primitives::Log,
 };
 
@@ -17,6 +20,7 @@ pub struct MiniTracer {
     pub max_steps: Option<usize>,
     pub record_stack_top: usize,
     pub depth: usize,
+    call_stack: Vec<usize>,
 }
 
 impl MiniTracer {
@@ -35,7 +39,10 @@ impl MiniTracer {
     }
 }
 
-impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer {
+impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer
+where
+    CTX: ContextTr,
+{
     fn step(&mut self, interp: &mut Interpreter<EthInterpreter>, _context: &mut CTX) {
         if !self.should_record_step() {
             return;
@@ -52,7 +59,7 @@ impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer {
             .collect();
 
         self.steps.push(StepTrace {
-            depth: self.depth,
+            depth: self.current_frame_depth(),
             pc: interp.bytecode.pc(),
             opcode,
             opcode_hex: format!("0x{opcode:02x}"),
@@ -66,6 +73,46 @@ impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer {
     fn log(&mut self, _context: &mut CTX, log: Log) {
         self.logs.push(log_trace(&log));
     }
+
+    fn call(&mut self, context: &mut CTX, inputs: &mut CallInputs) -> Option<CallOutcome> {
+        let input = inputs.input.bytes(context);
+        let call_index = self.calls.len();
+        self.calls.push(CallTrace {
+            depth: self.depth,
+            kind: call_kind(inputs),
+            from: inputs.caller.to_string(),
+            to: inputs.target_address.to_string(),
+            value: format!("{:#x}", inputs.call_value()),
+            input: format!("0x{}", hex::encode(input)),
+            gas_limit: inputs.gas_limit,
+            success: None,
+            gas_used: None,
+        });
+        self.call_stack.push(call_index);
+        self.depth += 1;
+        None
+    }
+
+    fn call_end(&mut self, _context: &mut CTX, _inputs: &CallInputs, outcome: &mut CallOutcome) {
+        self.depth = self.depth.saturating_sub(1);
+
+        if let Some(call_index) = self.call_stack.pop() {
+            if let Some(call) = self.calls.get_mut(call_index) {
+                call.success = Some(outcome.result.is_ok());
+                call.gas_used = Some(outcome.result.gas.total_gas_spent());
+            }
+        }
+    }
+}
+
+impl MiniTracer {
+    fn current_frame_depth(&self) -> usize {
+        self.depth.saturating_sub(1)
+    }
+}
+
+fn call_kind(inputs: &CallInputs) -> String {
+    format!("{:?}", inputs.scheme).to_uppercase()
 }
 
 fn log_trace(log: &Log) -> LogTrace {
@@ -75,4 +122,5 @@ fn log_trace(log: &Log) -> LogTrace {
         data: format!("0x{}", hex::encode(&log.data.data)),
     }
 }
+
 ```
