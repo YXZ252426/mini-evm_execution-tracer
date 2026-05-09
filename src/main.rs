@@ -13,24 +13,18 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::TraceLocal { 
-            contract, 
-            calldata, 
-            from, 
-            to, 
-            value, 
-            gas_limit, 
-            json, 
-            max_steps 
+        Commands::TraceLocal {
+            contract,
+            calldata,
+            from,
+            to,
+            value,
+            gas_limit,
+            json,
+            max_steps,
         } => {
             let output = executor::trace_local(
-                &contract, 
-                &calldata, 
-                &from, 
-                &to, 
-                &value, 
-                gas_limit, 
-                max_steps
+                &contract, &calldata, &from, &to, &value, gas_limit, max_steps,
             )?;
 
             output::print_summary(&output);
@@ -38,9 +32,9 @@ fn main() -> Result<()> {
             if let Some(path) = json {
                 output::write_json(&path, &output)?;
                 println!("trace written to {}", path.display());
-            }            
+            }
         }
     }
-    
+
     Ok(())
 }

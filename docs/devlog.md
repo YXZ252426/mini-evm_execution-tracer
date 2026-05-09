@@ -17,3 +17,7 @@ but actually do not need to worry too much, because different proj usually follo
 
 ## 3.8 add step tracer
 how to quickly locate certain api in large rust crates
+
+## 3.9 collect storage diff and build call tree
+
+good break through, learn the power of algorithm in real development

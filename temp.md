@@ -124,3 +124,106 @@ fn log_trace(log: &Log) -> LogTrace {
 }
 
 ```
+
+```rust
+#[derive(Debug, Clone, Serialize)]
+pub struct StorageDiff {
+    pub slot: String,
+    pub before: String,
+    pub after: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct StateDiff {
+    pub address: String,
+    pub storage: Vec<StorageDiff>,
+}
+```
+
+```rust
+fn collect_state_diff(state: &EvmState) -> Vec<StateDiff> {
+    let mut diffs = state
+        .iter()
+        .filter_map(|(address, account)| {
+            let mut storage = account
+                .changed_storage_slots()
+                .map(|(slot, value)| StorageDiff {
+                    slot: format!("{slot:#x}"),
+                    before: format!("{:#x}", value.original_value()),
+                    after: format!("{:#x}", value.present_value()),
+                })
+                .collect::<Vec<_>>();
+
+            storage.sort_by(|left, right| left.slot.cmp(&right.slot));
+
+            (!storage.is_empty()).then(|| StateDiff {
+                address: address.to_string(),
+                storage,
+            })
+        })
+        .collect::<Vec<_>>();
+
+    diffs.sort_by(|left, right| left.address.cmp(&right.address));
+    diffs
+}
+
+```
+
+```rust
+    fn call_end(&mut self, _context: &mut CTX, _inputs: &CallInputs, outcome: &mut CallOutcome) {
+        self.depth = self.depth.saturating_sub(1);
+        let success = outcome.result.is_ok();
+        let gas_used = outcome.result.gas.total_gas_spent();
+
+        if let Some(call_index) = self.call_stack.pop() {
+            if let Some(call) = self.calls.get_mut(call_index) {
+                call.success = Some(success);
+                call.gas_used = Some(gas_used);
+            }
+        }
+
+        if let Some(mut node) = self.call_tree_stack.pop() {
+            node.success = Some(success);
+            node.gas_used = Some(gas_used);
+
+            if let Some(parent) = self.call_tree_stack.last_mut() {
+                parent.children.push(node);
+            } else {
+                self.call_tree.push(node);
+            }
+        }
+    }
+```
+
+```rust
+fn build_call_tree(calls: &[CallTrace]) -> Vec<CallTreeNode> {
+    let mut roots = Vec::new();
+    let mut stack: Vec<CallTreeNode> = Vec::new();
+
+    for call in calls {
+        while stack.len() > call.depth {
+            flush_call_tree_node(&mut stack, &mut roots);
+        }
+
+        stack.push(call_tree_node(call));
+    }
+
+    while !stack.is_empty() {
+        flush_call_tree_node(&mut stack, &mut roots);
+    }
+
+    roots
+}
+
+fn flush_call_tree_node(stack: &mut Vec<CallTreeNode>, roots: &mut Vec<CallTreeNode>) {
+    let Some(node) = stack.pop() else {
+        return;
+    };
+
+    if let Some(parent) = stack.last_mut() {
+        parent.children.push(node);
+    } else {
+        roots.push(node);
+    }
+}
+```

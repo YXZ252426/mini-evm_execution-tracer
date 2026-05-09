@@ -1,10 +1,14 @@
-use crate::{types::{CallTrace, LogTrace, StepTrace}, utils::opcode_name};
+use crate::{
+    types::{CallTrace, LogTrace, StepTrace},
+    utils::opcode_name,
+};
 use revm::{
-    Inspector, 
-    context::ContextTr, 
+    Inspector,
+    context::ContextTr,
     interpreter::{
-        CallInputs, CallOutcome, Interpreter, interpreter::EthInterpreter, interpreter_types::Jumps
-    }, primitives::Log
+        CallInputs, CallOutcome, Interpreter, interpreter::EthInterpreter, interpreter_types::Jumps,
+    },
+    primitives::Log,
 };
 
 #[derive(Debug, Default)]
@@ -20,8 +24,8 @@ pub struct MiniTracer {
 
 impl MiniTracer {
     pub fn new(max_steps: Option<usize>) -> Self {
-        Self { 
-            max_steps, 
+        Self {
+            max_steps,
             record_stack_top: 6,
             ..Default::default()
         }
@@ -40,12 +44,12 @@ impl MiniTracer {
     }
 }
 impl<CTX> Inspector<CTX, EthInterpreter> for MiniTracer
-where 
-    CTX: ContextTr
+where
+    CTX: ContextTr,
 {
-    fn step(&mut self,interp: &mut Interpreter<EthInterpreter> , context: &mut CTX) {
+    fn step(&mut self, interp: &mut Interpreter<EthInterpreter>, _context: &mut CTX) {
         if !self.should_record_step() {
-            return
+            return;
         }
 
         let opcode = interp.bytecode.opcode();
@@ -55,50 +59,55 @@ where
             .iter()
             .rev()
             .take(self.record_stack_top)
-            .map(| value | format!("{value:#x}"))
+            .map(|value| format!("{value:#x}"))
             .collect();
 
-        self.steps.push(StepTrace { 
-            depth: self.current_frame_depth(), 
-            pc: interp.bytecode.pc(), 
-            opcode, 
-            opcode_hex: format!("0x{opcode:02x}"), 
-            opcode_name: opcode_name(opcode), 
-            gas_remaining: interp.gas.remaining(), 
-            stack_top, 
-            memory_size: interp.memory.len() 
+        self.steps.push(StepTrace {
+            depth: self.current_frame_depth(),
+            pc: interp.bytecode.pc(),
+            opcode,
+            opcode_hex: format!("0x{opcode:02x}"),
+            opcode_name: opcode_name(opcode),
+            gas_remaining: interp.gas.remaining(),
+            stack_top,
+            memory_size: interp.memory.len(),
         });
     }
 
-    fn log(&mut self,context: &mut CTX,log: Log) {
+    fn log(&mut self, _context: &mut CTX, log: Log) {
         self.logs.push(log_trace(&log));
     }
 
-    fn call(&mut self,context: &mut CTX,inputs: &mut CallInputs) -> Option<CallOutcome> {
+    fn call(&mut self, context: &mut CTX, inputs: &mut CallInputs) -> Option<CallOutcome> {
         let input = inputs.input.bytes(context);
+        let call = CallTrace {
+            depth: self.depth,
+            kind: call_kind(inputs),
+            from: inputs.caller.to_string(),
+            to: inputs.target_address.to_string(),
+            value: format!("{:#x}", inputs.call_value()),
+            input: format!("0x{}", hex::encode(input)),
+            gas_limit: inputs.gas_limit,
+            success: None,
+            gas_used: None,
+        };
+
         let call_index = self.calls.len();
-        self.calls.push(CallTrace { 
-            depth: self.depth, 
-            kind: call_kind(inputs), 
-            from: inputs.transfer_from().to_string(), 
-            to: inputs.transfer_to().to_string(), 
-            value: format!("{:#x}", inputs.call_value()), 
-            input: format!("0x{}", hex::encode(input)), 
-            gas_limit: inputs.gas_limit, 
-            success: None, 
-            gas_used: None, 
-        });
+        self.calls.push(call);
         self.call_stack.push(call_index);
         self.depth += 1;
         None
     }
 
-    fn call_end(&mut self,context: &mut CTX,inputs: &CallInputs,outcome: &mut CallOutcome) {
+    fn call_end(&mut self, _context: &mut CTX, _inputs: &CallInputs, outcome: &mut CallOutcome) {
         self.depth = self.depth.saturating_sub(1);
+        let success = outcome.result.is_ok();
+        let gas_used = outcome.result.gas.total_gas_spent();
+
         if let Some(call_index) = self.call_stack.pop() {
             if let Some(call) = self.calls.get_mut(call_index) {
-                call.success = Some(outcome.result.is_ok());
-                call.gas_used = Some(outcome.result.gas.total_gas_spent())
+                call.success = Some(success);
+                call.gas_used = Some(gas_used);
             }
         }
     }
@@ -107,10 +116,11 @@ where
 fn call_kind(inputs: &CallInputs) -> String {
     format!("{:?}", inputs.scheme).to_uppercase()
 }
-fn log_trace(log: &Log ) -> LogTrace {
-    LogTrace { 
-        address: log.address.to_string(), 
-        topics: log.data.topics().iter().map(ToString::to_string).collect(), 
-        data:  format!("0x{}", hex::encode(&log.data.data)),
+
+fn log_trace(log: &Log) -> LogTrace {
+    LogTrace {
+        address: log.address.to_string(),
+        topics: log.data.topics().iter().map(ToString::to_string).collect(),
+        data: format!("0x{}", hex::encode(&log.data.data)),
     }
 }

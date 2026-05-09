@@ -158,5 +158,33 @@
       "gas_used": 3000
     }
   ],
-  "logs": []
+  "call_tree": [
+    {
+      "depth": 0,
+      "kind": "CALL",
+      "from": "0x1000000000000000000000000000000000000000",
+      "to": "0x2000000000000000000000000000000000000000",
+      "value": "0x0",
+      "input": "0x",
+      "gas_limit": 29979000,
+      "success": true,
+      "gas_used": 3121,
+      "children": [
+        {
+          "depth": 1,
+          "kind": "CALL",
+          "from": "0x2000000000000000000000000000000000000000",
+          "to": "0x0000000000000000000000000000000000000001",
+          "value": "0x0",
+          "input": "0x",
+          "gas_limit": 10000,
+          "success": true,
+          "gas_used": 3000,
+          "children": []
+        }
+      ]
+    }
+  ],
+  "logs": [],
+  "state_diff": []
 }

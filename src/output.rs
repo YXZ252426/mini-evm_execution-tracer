@@ -1,9 +1,16 @@
+use crate::types::TraceOutput;
 use eyre::Result;
 use std::{fs, path::Path};
-use crate::types::TraceOutput;
 
 pub fn print_summary(output: &TraceOutput) {
-    println!("tx status: {}", if output.summary.success { "success" } else { "failed "});
+    println!(
+        "tx status: {}",
+        if output.summary.success {
+            "success"
+        } else {
+            "failed "
+        }
+    );
     println!("gas used: {}", output.summary.gas_used);
     println!("steps: {}", output.summary.step_count);
     println!("calls: {}", output.summary.call_count);

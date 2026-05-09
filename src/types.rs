@@ -25,10 +25,36 @@ pub struct CallTrace {
 }
 
 #[derive(Debug, Clone, Serialize)]
+pub struct CallTreeNode {
+    pub depth: usize,
+    pub kind: String,
+    pub from: String,
+    pub to: String,
+    pub value: String,
+    pub input: String,
+    pub gas_limit: u64,
+    pub success: Option<bool>,
+    pub gas_used: Option<u64>,
+    pub children: Vec<CallTreeNode>,
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct LogTrace {
     pub address: String,
     pub topics: Vec<String>,
     pub data: String,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct StorageDiff {
+    pub slot: String,
+    pub before: String,
+    pub after: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct StateDiff {
+    pub address: String,
+    pub storage: Vec<StorageDiff>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -45,6 +71,7 @@ pub struct TraceOutput {
     pub summary: TraceSummary,
     pub steps: Vec<StepTrace>,
     pub calls: Vec<CallTrace>,
+    pub call_tree: Vec<CallTreeNode>,
     pub logs: Vec<LogTrace>,
+    pub state_diff: Vec<StateDiff>,
 }
-

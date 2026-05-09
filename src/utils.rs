@@ -1,4 +1,4 @@
-use eyre::{eyre, Result};
+use eyre::{Result, eyre};
 use std::{fs, path::Path};
 
 pub fn read_hex_file(path: &Path) -> Result<Vec<u8>> {
