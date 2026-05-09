@@ -76,7 +76,7 @@ where
 
     fn call(&mut self,context: &mut CTX,inputs: &mut CallInputs) -> Option<CallOutcome> {
         let input = inputs.input.bytes(context);
-
+        let call_index = self.calls.len();
         self.calls.push(CallTrace { 
             depth: self.depth, 
             kind: call_kind(inputs), 
@@ -88,6 +88,8 @@ where
             success: None, 
             gas_used: None, 
         });
+        self.call_stack.push(call_index);
+        self.depth += 1;
         None
     }
 
