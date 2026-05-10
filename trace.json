@@ -1,10 +1,10 @@
 {
   "summary": {
     "success": true,
-    "gas_used": 24121,
-    "step_count": 9,
+    "gas_used": 69465,
+    "step_count": 25,
     "call_count": 2,
-    "log_count": 0
+    "log_count": 1
   },
   "steps": [
     {
@@ -15,7 +15,11 @@
       "opcode_name": "PUSH1",
       "gas_remaining": 29979000,
       "stack_top": [],
-      "memory_size": 0
+      "memory_size": 0,
+      "memory_preview_size": 0,
+      "memory_preview": "0x",
+      "memory_truncated": false,
+      "storage": []
     },
     {
       "depth": 0,
@@ -25,75 +29,374 @@
       "opcode_name": "PUSH1",
       "gas_remaining": 29978997,
       "stack_top": [
-        "0x0"
+        "0x2a"
       ],
-      "memory_size": 0
+      "memory_size": 0,
+      "memory_preview_size": 0,
+      "memory_preview": "0x",
+      "memory_truncated": false,
+      "storage": []
     },
     {
       "depth": 0,
       "pc": 4,
-      "opcode": 96,
-      "opcode_hex": "0x60",
-      "opcode_name": "PUSH1",
+      "opcode": 82,
+      "opcode_hex": "0x52",
+      "opcode_name": "MSTORE",
       "gas_remaining": 29978994,
       "stack_top": [
         "0x0",
-        "0x0"
+        "0x2a"
       ],
-      "memory_size": 0
+      "memory_size": 0,
+      "memory_preview_size": 0,
+      "memory_preview": "0x",
+      "memory_truncated": false,
+      "storage": []
     },
     {
       "depth": 0,
-      "pc": 6,
-      "opcode": 96,
-      "opcode_hex": "0x60",
-      "opcode_name": "PUSH1",
-      "gas_remaining": 29978991,
-      "stack_top": [
-        "0x0",
-        "0x0",
-        "0x0"
-      ],
-      "memory_size": 0
-    },
-    {
-      "depth": 0,
-      "pc": 8,
+      "pc": 5,
       "opcode": 96,
       "opcode_hex": "0x60",
       "opcode_name": "PUSH1",
       "gas_remaining": 29978988,
-      "stack_top": [
-        "0x0",
-        "0x0",
-        "0x0",
-        "0x0"
-      ],
-      "memory_size": 0
+      "stack_top": [],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
     },
     {
       "depth": 0,
-      "pc": 10,
+      "pc": 7,
       "opcode": 96,
       "opcode_hex": "0x60",
       "opcode_name": "PUSH1",
       "gas_remaining": 29978985,
       "stack_top": [
+        "0x1"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 9,
+      "opcode": 85,
+      "opcode_hex": "0x55",
+      "opcode_name": "SSTORE",
+      "gas_remaining": 29978982,
+      "stack_top": [
+        "0x0",
+        "0x1"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": [
+        {
+          "op": "SSTORE",
+          "address": "0x2000000000000000000000000000000000000000",
+          "slot": "0x0",
+          "value_before": "0x0",
+          "value_after": "0x1",
+          "write_value": "0x1"
+        }
+      ]
+    },
+    {
+      "depth": 0,
+      "pc": 10,
+      "opcode": 97,
+      "opcode_hex": "0x61",
+      "opcode_name": "PUSH2",
+      "gas_remaining": 29956882,
+      "stack_top": [],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 13,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29956879,
+      "stack_top": [
+        "0xbeef"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 15,
+      "opcode": 85,
+      "opcode_hex": "0x55",
+      "opcode_name": "SSTORE",
+      "gas_remaining": 29956876,
+      "stack_top": [
+        "0x2",
+        "0xbeef"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": [
+        {
+          "op": "SSTORE",
+          "address": "0x2000000000000000000000000000000000000000",
+          "slot": "0x2",
+          "value_before": "0x0",
+          "value_after": "0xbeef",
+          "write_value": "0xbeef"
+        }
+      ]
+    },
+    {
+      "depth": 0,
+      "pc": 16,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29934776,
+      "stack_top": [],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 18,
+      "opcode": 84,
+      "opcode_hex": "0x54",
+      "opcode_name": "SLOAD",
+      "gas_remaining": 29934773,
+      "stack_top": [
+        "0x0"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": [
+        {
+          "op": "SLOAD",
+          "address": "0x2000000000000000000000000000000000000000",
+          "slot": "0x0",
+          "value_before": "0x1",
+          "value_after": "0x1",
+          "write_value": null
+        }
+      ]
+    },
+    {
+      "depth": 0,
+      "pc": 19,
+      "opcode": 80,
+      "opcode_hex": "0x50",
+      "opcode_name": "UNKNOWN",
+      "gas_remaining": 29934673,
+      "stack_top": [
+        "0x1"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 20,
+      "opcode": 127,
+      "opcode_hex": "0x7f",
+      "opcode_name": "PUSH32",
+      "gas_remaining": 29934671,
+      "stack_top": [],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 53,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29934668,
+      "stack_top": [
+        "0x1111111111111111111111111111111111111111111111111111111111111111"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 55,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29934665,
+      "stack_top": [
+        "0x20",
+        "0x1111111111111111111111111111111111111111111111111111111111111111"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 57,
+      "opcode": 161,
+      "opcode_hex": "0xa1",
+      "opcode_name": "LOG1",
+      "gas_remaining": 29934662,
+      "stack_top": [
+        "0x0",
+        "0x20",
+        "0x1111111111111111111111111111111111111111111111111111111111111111"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 58,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29933656,
+      "stack_top": [],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 60,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29933653,
+      "stack_top": [
+        "0x0"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 62,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29933650,
+      "stack_top": [
+        "0x0",
+        "0x0"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 64,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29933647,
+      "stack_top": [
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 66,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29933644,
+      "stack_top": [
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
+    },
+    {
+      "depth": 0,
+      "pc": 68,
+      "opcode": 96,
+      "opcode_hex": "0x60",
+      "opcode_name": "PUSH1",
+      "gas_remaining": 29933641,
+      "stack_top": [
         "0x0",
         "0x0",
         "0x0",
         "0x0",
         "0x0"
       ],
-      "memory_size": 0
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
     },
     {
       "depth": 0,
-      "pc": 12,
+      "pc": 70,
       "opcode": 97,
       "opcode_hex": "0x61",
       "opcode_name": "PUSH2",
-      "gas_remaining": 29978982,
+      "gas_remaining": 29933638,
       "stack_top": [
         "0x1",
         "0x0",
@@ -102,15 +405,19 @@
         "0x0",
         "0x0"
       ],
-      "memory_size": 0
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
     },
     {
       "depth": 0,
-      "pc": 15,
+      "pc": 73,
       "opcode": 241,
       "opcode_hex": "0xf1",
       "opcode_name": "CALL",
-      "gas_remaining": 29978979,
+      "gas_remaining": 29933635,
       "stack_top": [
         "0x2710",
         "0x1",
@@ -119,19 +426,27 @@
         "0x0",
         "0x0"
       ],
-      "memory_size": 0
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
     },
     {
       "depth": 0,
-      "pc": 16,
+      "pc": 74,
       "opcode": 0,
       "opcode_hex": "0x00",
       "opcode_name": "STOP",
-      "gas_remaining": 29975879,
+      "gas_remaining": 29930535,
       "stack_top": [
         "0x1"
       ],
-      "memory_size": 0
+      "memory_size": 32,
+      "memory_preview_size": 32,
+      "memory_preview": "0x000000000000000000000000000000000000000000000000000000000000002a",
+      "memory_truncated": false,
+      "storage": []
     }
   ],
   "calls": [
@@ -144,7 +459,7 @@
       "input": "0x",
       "gas_limit": 29979000,
       "success": true,
-      "gas_used": 3121
+      "gas_used": 48465
     },
     {
       "depth": 1,
@@ -168,7 +483,7 @@
       "input": "0x",
       "gas_limit": 29979000,
       "success": true,
-      "gas_used": 3121,
+      "gas_used": 48465,
       "children": [
         {
           "depth": 1,
@@ -185,6 +500,30 @@
       ]
     }
   ],
-  "logs": [],
-  "state_diff": []
+  "logs": [
+    {
+      "address": "0x2000000000000000000000000000000000000000",
+      "topics": [
+        "0x1111111111111111111111111111111111111111111111111111111111111111"
+      ],
+      "data": "0x000000000000000000000000000000000000000000000000000000000000002a"
+    }
+  ],
+  "state_diff": [
+    {
+      "address": "0x2000000000000000000000000000000000000000",
+      "storage": [
+        {
+          "slot": "0x0",
+          "before": "0x0",
+          "after": "0x1"
+        },
+        {
+          "slot": "0x2",
+          "before": "0x0",
+          "after": "0xbeef"
+        }
+      ]
+    }
+  ]
 }

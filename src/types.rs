@@ -10,6 +10,20 @@ pub struct StepTrace {
     pub gas_remaining: u64,
     pub stack_top: Vec<String>,
     pub memory_size: usize,
+    pub memory_preview_size: usize,
+    pub memory_preview: String,
+    pub memory_truncated: bool,
+    pub storage: Vec<StepStorageTrace>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct StepStorageTrace {
+    pub op: String,
+    pub address: String,
+    pub slot: String,
+    pub value_before: Option<String>,
+    pub value_after: Option<String>,
+    pub write_value: Option<String>,
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct CallTrace {
